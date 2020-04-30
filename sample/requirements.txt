@@ -1,0 +1,4 @@
+flask
+jinja2
+Flask-WTF
+email_validator
