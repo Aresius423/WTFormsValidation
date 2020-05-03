@@ -1,0 +1,42 @@
+{% extends "index.html" %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/yaireo.css') }}">
+<style>.alert { height: 2rem; } label { text-transform: none;}</style>
+{% endblock %}
+
+{% block form %}
+<div class="col md-12">
+    <form name="myform" method="POST" novalidate>
+        {{ form.csrf_token }}
+        <fieldset>
+            {% for field in form if field != form.csrf_token %}
+	    <div class="row">
+                <div class="field mt-3" style="display: inline-flex;">
+                    <label style="width: 100%;">
+                        <span>{{ field.label }}</span>
+                        {{ field(size=20) }}
+                    </label>
+                </div>
+	    </div>
+            {% endfor %}
+        </fieldset>
+        <input type="submit" value="Validate">
+    </form>
+</div>
+{% endblock %}
+
+{% block validatorscript %}
+    <script src="{{ url_for('static', filename='js/yaireo.js') }}"></script>
+    <script>
+        var validator = new FormValidator({"events" : ['blur']}, document.forms[0]);
+
+        document.forms[0].onsubmit = function(e){
+            var submit = true,
+                validatorResult = validator.checkAll(this);
+
+            console.log(validatorResult);
+            return !!validatorResult.valid;
+        };
+    </script>
+{% endblock %}

@@ -1,6 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        {% block stylesheet %}{% endblock %}
     </head>
     <body>
         <div class="row d-flex justify-content-center">
@@ -8,30 +9,28 @@
                 <div class="container">
                     <div class="row my-5" style="height: 25px;"><div class="col-sm-4"></div><div class="col-sm-8"><h1>{{ result | safe }}</h1></div></div>
                     <div class="row my-5"><div class="col-sm-4"></div><div class="col-sm-8"><h1>{{ message }}</h1></div></div>
-                    <form name="myform" method="POST">
-                        {{ form.csrf_token }}
-                        <div class="form-group row">
-                            <div class="col-sm-4">{{ form.name.label }}</div>
-                            <div class="col-sm-8">{{ form.name(size=20) }}</div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-4">{{ form.email.label }}</div>
-                            <div class="col-sm-8">{{ form.email(size=20) }}</div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-4">{{ form.date.label }}</div>
-                            <div class="col-sm-8">{{ form.date(size=20) }}</div>
-                        </div>
-                        <input type="submit" value="Validate">
-                    </form>
+                    {% block form %}
+                        <form name="myform" method="POST">
+                            {{ form.csrf_token }}
+                            {% for field in form if field != form.csrf_token %}
+                                <div class="form-group row">
+                                    <div class="col-sm-4">{{ field.label }}</div>
+                                    <div class="col-sm-8">{{ field(size=20) }}</div>
+                                </div>
+                            {% endfor %}
+                            <input type="submit" value="Validate">
+                        </form>
+                    {% endblock %}
                 </div>
             </div>
         </div>
 
-        <script>
-            {% if log %}
+        {% if log %}
+            <script>
                 console.log({{ log | safe }});
-            {% endif %}
-        </script>
+            </script>
+        {% endif %}
+
+        {% block validatorscript %}{% endblock %}
     </body>
 </html>
