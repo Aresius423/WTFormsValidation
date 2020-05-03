@@ -32,4 +32,5 @@ def any_of_regex(strlist: List[str]) -> str:
 
 def none_of_regex(strlist: List[str]) -> str:
     """Return a regex that matches everything but the strings provided"""
-    return f'^(?!{escape_and_or(strlist)})'
+    disallowed = any_of_regex(strlist)
+    return f'^((?!{disallowed}).*|({disallowed}.+))$'

@@ -23,6 +23,7 @@ def parslify(form: Form) -> Form:
     @param form: the input WTForm
     @return: the form, with validator tags applied
     """
+    return default_provider.parsley().extend(form)
 
 
 def bouncify(form: Form, in_place: bool = False) -> Form:

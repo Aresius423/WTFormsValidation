@@ -2,16 +2,33 @@
 
 from typing import Dict
 
-from wtforms import Form
+from wtforms import Form, validators
 from wtforms.fields import Field
 
 
 class TaggerBase:
-    def tags(self, field: Field):
-        """Expected to be overloaded by a function that takes a WTForms field,
-        and returns a dict render_kw is to be updated with
+    def validator_to_dict(self, validator) -> Dict:  # type: ignore
+        """Take a validator, and return it in a tag form
+        Classes derived from TaggerBase are expected to provide _Tags functions,
+        that take the validator as their sole argument.
+        e.g. wtforms.validators.Email -> def EmailTags(self, validator: wtforms.validators.Email)
         """
-        raise NotImplementedError
+        validator_funcname = f'{type(validator).__name__}Tags'
+
+        if hasattr(validator, 'validate_hostname'):
+            # URL validator is really just a regex in disguise
+            validator_funcname = 'URLTags'
+
+        if hasattr(self, validator_funcname):
+            return getattr(self, validator_funcname)(validator)
+        return dict()
+
+    def tags(self, field: Field) -> Dict:
+        result = dict()
+        for validator in field.validators:
+            result.update(self.validator_to_dict(validator))
+
+        return result
 
     def extend(self, form: Form):
         """Extend the form with checker tags"""

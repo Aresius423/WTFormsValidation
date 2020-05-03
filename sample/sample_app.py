@@ -8,8 +8,9 @@ from wtforms import validators
 
 from typing import Callable
 
-from WTFormsValidation import yairify
+from WTFormsValidation import yairify, parslify
 from WTFormsValidation.tagging.yaireo import YairEOtagger
+from WTFormsValidation.tagging.parsley import ParsleyTagger
 
 app = Flask(__name__)
 csrf = CSRFProtect()
@@ -25,6 +26,13 @@ class ExampleForm(FlaskForm):
         for field in self:
             field.validators += (validators.DataRequired(),)
 
+    def add_parsley_listeners(self):
+        for field in self:
+            if field.render_kw is None:
+                field.render_kw = {'data-parsley-trigger': 'focusout'}
+            else:
+                field.render_kw.update({'data-parsley-trigger': 'focusout'})
+
     name = StringField('Name')
     email = StringField('E-mail address', validators=[validators.Email()])
     date = StringField('Date in yyyy-mm-dd format', validators=[validators.Regexp(r'\d{4}-\d{2}-\d{2}')])
@@ -33,7 +41,7 @@ class ExampleForm(FlaskForm):
     ipv6 = StringField('Valid IPv6 address', validators=[validators.IPAddress(ipv4=False, ipv6=True)])
     ipv46 = StringField('Valid IPv4 or IPv6 address', validators=[validators.IPAddress(ipv4=True, ipv6=True)])
     length_range = StringField('3-8 chars long string', validators=[validators.Length(3, 8)])
-    length_range_2 = StringField('max. 8 chars long string', validators=[validators.Length(max=8)])
+    length_range_2 = StringField('min. 3 chars long string', validators=[validators.Length(min=3)])
     mac = StringField('MAC address', validators=[validators.MacAddress()])
 
     # YairEO requires type to be number
@@ -57,27 +65,44 @@ def colour_text(text: str, colour: str) -> str:
 
 @app.route('/', methods=['GET', 'POST'])
 def no_validator():
-    return make_page('index.html', lambda x: x)
+    form = ExampleForm()
+    return make_page('index.html', form)
 
 
 @app.route('/yaireo', methods=['GET', 'POST'])
 def yaireo_builtin():
-    return make_page('yaireo.html', yairify)
+    form = ExampleForm()
+    return make_page('yaireo.html', yairify(form))
 
 
 @app.route('/yaireo_builtin', methods=['GET', 'POST'])
 def yaireo():
     tagger = YairEOtagger(email_builtin=True, url_builtin=True)
-    return make_page('yaireo.html', tagger.extend)
-
-
-def make_page(template, fn: Callable[[FlaskForm], FlaskForm]):
     form = ExampleForm()
+    return make_page('yaireo.html', tagger.extend(form))
+
+
+@app.route('/parsley_builtin', methods=['GET', 'POST'])
+def parsley_builtin():
+    form = ExampleForm()
+    form.add_parsley_listeners()
+    return make_page('parsley.html', parslify(form))
+
+
+@app.route('/parsley_regex', methods=['GET', 'POST'])
+def parsley_regex():
+    tagger = ParsleyTagger(email_builtin=False, url_builtin=False)
+    form = ExampleForm()
+    form.add_parsley_listeners()
+    return make_page('parsley.html', tagger.extend(form))
+
+
+def make_page(template, form: FlaskForm):
     if request.method == 'POST':
         if form.validate():
-            return render_page(template, fn(form), result=colour_text('Form passed backend validation', 'green'))
-        return render_page(template, fn(form), result=colour_text('Form failed backend validation', 'red'), log=form.errors)
-    return render_page(template, fn(form))
+            return render_page(template, form, result=colour_text('Form passed backend validation', 'green'))
+        return render_page(template, form, result=colour_text('Form failed backend validation', 'red'), log=form.errors)
+    return render_page(template, form)
 
 
 if __name__ == '__main__':

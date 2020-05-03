@@ -1,4 +1,4 @@
-from WTFormsValidation.tagging import YairEOtagger
+from WTFormsValidation.tagging import YairEOtagger, ParsleyTagger
 
 
 class DefaultProvider:
@@ -15,6 +15,11 @@ class DefaultProvider:
         if self.instance_yaireo is None:
             self.instance_yaireo = YairEOtagger()
         return self.instance_yaireo
+
+    def parsley(self) -> ParsleyTagger:
+        if self.instance_parsley is None:
+            self.instance_parsley = ParsleyTagger()
+        return self.instance_parsley
 
 
 default_provider = DefaultProvider()
