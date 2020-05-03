@@ -27,10 +27,10 @@ Validators marked with an R are supported via regexes. Using multiple regex-back
 | NoneOf            | R       |           |            |               |          |                   |
 | Custom validators | ❌       |           |            |               |          |                   |
 
-¹ YairEO has built-in support for e-mail and URL validation, however these require the input field's type to be set to "email" and "url" respectively. By default, the regex-backed validator is used, but you can choose to use the built-in validators by instantiating YairEOtagger yourself.
-² To use this validator, you have to set the input field's type to "number"
-³ Same behaviour as DataRequired
-⁴ Due to a bug in YairEO, only fields marked as required are validated, so currently this should have no effect
+¹ YairEO has built-in support for e-mail and URL validation, however these require the input field's type to be set to "email" and "url" respectively. By default, the regex-backed validator is used, but you can choose to use the built-in validators by instantiating YairEOtagger yourself.  
+² To use this validator, you have to set the input field's type to "number"  
+³ Same behaviour as DataRequired  
+⁴ Due to a bug in YairEO, only fields marked as required are validated, so currently this should have no effect  
 
 ## Running the sample application
 
