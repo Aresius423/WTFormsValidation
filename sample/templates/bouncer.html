@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/yaireo.css') }}">
+<style>.alert { height: 2rem; } label { text-transform: none;}</style>
+{% endblock %}
+
+{% block form %}
+<div class="col md-12">
+    <form name="myform" method="POST" novalidate data-parsley-validate>
+        {{ form.csrf_token }}
+        {% for field in form if field != form.csrf_token %}
+            <div class="form-group row">
+                <div class="col-sm-4">{{ field.label }}</div>
+                <div class="col-sm-8">{{ field(size=20) }}</div>
+            </div>
+        {% endfor %}
+        <input type="submit" value="Validate">
+    </form>
+</div>
+{% endblock %}
+
+{% block validatorscript %}
+    <script src="{{ url_for('static', filename='js/bouncer.polyfills.js') }}"></script>
+    <script>
+        var validate = new Bouncer('form');
+    </script>
+{% endblock %}

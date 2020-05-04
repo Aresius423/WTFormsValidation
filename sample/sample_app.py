@@ -5,9 +5,10 @@ from flask_wtf.csrf import CSRFProtect
 from wtforms import StringField, IntegerField
 from wtforms import validators
 
-from WTFormsValidation import yairify, parslify
+from WTFormsValidation import yairify, parslify, bouncify
 from WTFormsValidation.tagging.yaireo import YairEOtagger
 from WTFormsValidation.tagging.parsley import ParsleyTagger
+from WTFormsValidation.tagging.bouncer import BouncerTagger
 
 app = Flask(__name__)
 csrf = CSRFProtect()
@@ -93,6 +94,19 @@ def parsley_regex():
     form = ExampleForm()
     form.add_parsley_listeners()
     return make_page('parsley.html', tagger.extend(form))
+
+
+@app.route('/bouncer', methods=['GET', 'POST'])
+def bouncer_builtin():
+    form = ExampleForm()
+    return make_page('bouncer.html', bouncify(form))
+
+
+@app.route('/bouncer_builtin', methods=['GET', 'POST'])
+def bouncer():
+    tagger = BouncerTagger(email_builtin=True, url_builtin=True)
+    form = ExampleForm()
+    return make_page('bouncer.html', tagger.extend(form))
 
 
 def make_page(template, form: FlaskForm):

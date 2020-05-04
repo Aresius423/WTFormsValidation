@@ -1,4 +1,4 @@
-from WTFormsValidation.tagging import YairEOtagger, ParsleyTagger
+from WTFormsValidation.tagging import YairEOtagger, ParsleyTagger, BouncerTagger
 
 
 class DefaultProvider:
@@ -6,7 +6,7 @@ class DefaultProvider:
         """Provide lazy-loading instances of the transformers"""
         self.instance_yaireo = None
         self.instance_parsley = None
-        self.instance_bounce = None
+        self.instance_bouncer = None
         self.instance_justvalidate = None
         self.instance_pristine = None
         self.instance_jqvalidate = None
@@ -20,6 +20,11 @@ class DefaultProvider:
         if self.instance_parsley is None:
             self.instance_parsley = ParsleyTagger()
         return self.instance_parsley
+
+    def bouncer(self) -> BouncerTagger:
+        if self.instance_bouncer is None:
+            self.instance_bouncer = BouncerTagger()
+        return self.instance_bouncer
 
 
 default_provider = DefaultProvider()

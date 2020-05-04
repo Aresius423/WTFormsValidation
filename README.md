@@ -11,7 +11,7 @@ Validators marked with an R are supported via regexes. Using multiple regex-back
 
 | WTForms validator | [YairEO](https://github.com/yairEO/validator) | [ParsleyJS](https://parsleyjs.org/doc/examples.html)  | [Bouncer.js](https://github.com/cferdinandi/bouncer) | [just-validate](https://github.com/horprogs/Just-validate) | [Pristine](https://github.com/sha256/Pristine) | [jQuery validation](https://github.com/jquery-validation/jquery-validation) |
 |-------------------|--------|-----------|------------|---------------|----------|-------------------|
-| DataRequired      |  ✔️    |  TODO         | TODO           |         TODO      | TODO         | TODO                  |
+| DataRequired      |  ✔️    |  ✔️        | TODO           |         TODO      | TODO         | TODO                  |
 | Email             |✔️\|R¹|✔️\|R¹|            |               |          |                   |
 | EqualTo           | ✔️     |  ✔️         |            |               |          |                   |
 | InputRequired     | ✔️²     |  ✔️²         |            |               |          |                   |

@@ -25,7 +25,7 @@ class ParsleyTagger(TaggerBase):
         if self.url_builtin:
             return {'data-parsley-type': 'url'}
         else:
-            return {'pattern': URL_REGEX}
+            return {'data-parsley-pattern': URL_REGEX}
 
     def DataRequiredTags(self, validator: validators.DataRequired):
         return {'data-parsley-required': 'true'}
@@ -44,11 +44,11 @@ class ParsleyTagger(TaggerBase):
 
     def IPAddressTags(self, validator: validators.Email):
         if validator.ipv4 and validator.ipv6:
-            return {'pattern': IPV46_REGEX}
+            return {'data-parsley-pattern': IPV46_REGEX}
         elif validator.ipv4:
-            return {'pattern': IPV4_REGEX}
+            return {'data-parsley-pattern': IPV4_REGEX}
         elif validator.ipv6:
-            return {'pattern': IPV6_REGEX}
+            return {'data-parsley-pattern': IPV6_REGEX}
 
     def LengthTags(self, validator: validators.Length):
         result = {}

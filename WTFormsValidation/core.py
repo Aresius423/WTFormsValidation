@@ -33,6 +33,7 @@ def bouncify(form: Form, in_place: bool = False) -> Form:
     @param form: the input WTForm
     @return: the form, with validator tags applied
     """
+    return default_provider.bouncer().extend(form)
 
 
 def justvalidate():
