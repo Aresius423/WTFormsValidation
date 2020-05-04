@@ -12,25 +12,24 @@ Validators marked with an R are supported via regexes. Using multiple regex-back
 | WTForms validator | [YairEO](https://github.com/yairEO/validator) | [ParsleyJS](https://parsleyjs.org/doc/examples.html)  | [Bouncer.js](https://github.com/cferdinandi/bouncer) | [just-validate](https://github.com/horprogs/Just-validate) | [Pristine](https://github.com/sha256/Pristine) | [jQuery validation](https://github.com/jquery-validation/jquery-validation) |
 |-------------------|--------|-----------|------------|---------------|----------|-------------------|
 | DataRequired      |  ✔️    |  TODO         | TODO           |         TODO      | TODO         | TODO                  |
-| Email             | ✔️ \| R ¹|          |            |               |          |                   |
-| EqualTo           | ✔️     |           |            |               |          |                   |
-| InputRequired     | ✔️ ³    |           |            |               |          |                   |
-| IPAddress         | R       |           |            |               |          |                   |
-| Length            | ✔️       |           |            |               |          |                   |
-| MacAddress        | R       |           |            |               |          |                   |
-| NumberRange       | ✔️ ²       |           |            |               |          |                   |
-| Optional          | ✔️ ⁴ |           |            |               |          |                   |
-| Regexp            | ✔️       |           |            |               |          |                   |
-| URL               | ✔️ \| R *|           |            |               |          |                   |
-| UUID              | R       |           |            |               |          |                   |
-| AnyOf             | R       |           |            |               |          |                   |
-| NoneOf            | R       |           |            |               |          |                   |
-| Custom validators | ❌       |           |            |               |          |                   |
+| Email             |✔️\|R¹|✔️\|R¹|            |               |          |                   |
+| EqualTo           | ✔️     |  ✔️         |            |               |          |                   |
+| InputRequired     | ✔️²     |  ✔️²         |            |               |          |                   |
+| IPAddress         | R       | R          |            |               |          |                   |
+| Length            | ✔️       |  ✔️         |            |               |          |                   |
+| MacAddress        | R       |✔️            |            |               |          |                   |
+| NumberRange       | ✔️       |  ✔️         |            |               |          |                   |
+| Optional          | ✔️³  |  ✔️         |            |               |          |                   |
+| Regexp            | ✔️       | ✔️          |            |               |          |                   |
+| URL               |✔️\|R¹|✔️\|R¹|            |               |          |                   |
+| UUID              | R       | R          |            |               |          |                   |
+| AnyOf             | R       | R          |            |               |          |                   |
+| NoneOf            | R       | R          |            |               |          |                   |
+| Custom validators | ❌       | ❌          |            |               |          |                   |
 
-¹ YairEO has built-in support for e-mail and URL validation, however these require the input field's type to be set to "email" and "url" respectively. By default, the regex-backed validator is used, but you can choose to use the built-in validators by instantiating YairEOtagger yourself.  
-² To use this validator, you have to set the input field's type to "number"  
-³ Same behaviour as DataRequired  
-⁴ Due to a bug in YairEO, only fields marked as required are validated, so currently this should have no effect  
+¹ These libraries have built-in support for e-mail and URL validation, but you can choose to use the WTFormsValidation's regex validators instead. Defaults to built-in, unless that requires WTFormsValidation to change the field's type (in the case of YairEO)
+² Same behaviour as DataRequired  
+³ Due to a bug in YairEO, only fields marked as required are validated, so currently this should have no effect  
 
 ## Running the sample application
 
@@ -58,8 +57,25 @@ render_template('your_template.html', form=yairify(form))
 or by instantiating the tagger class yourself:
 ```
 from WTFormsValidation.tagging.yaireo import YairEOtagger
-yaireo_tagger = YairEOtagger(email_builtin=True, url_builtin=True)
+yaireo_tagger = YairEOtagger(email_builtin=True, url_builtin=True)  # defaults negated
 ...
 render_template('your_template.html', form=yaireo_tagger.extend(form))
+```
+
+### Integrating with ParsleyJS
+
+Using the default settings for the tagger class:
+```
+from WTFormsValidation import parslify
+...
+render_template('your_template.html', form=parslify(form))
+```
+
+or by instantiating the tagger class yourself:
+```
+from WTFormsValidation.tagging.parsley import ParsleyTagger
+parsley_tagger = ParsleyTagger(email_builtin=False, url_builtin=False)  # defaults negated
+...
+render_template('your_template.html', form=parley_tagger.extend(form))
 ```
 
