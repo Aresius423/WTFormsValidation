@@ -7,6 +7,7 @@ Compatible with Python 3.6 and Python 3.7
 ## Table of Contents
 
 * [Supported validators](#supported-validators)
+* [Setup](#setup)
 * [Running the sample application](#running-the-sample-application)
 * [Usage](#usage)
     * [Integrating with YairEO](#integrating-with-yaireo)
@@ -42,6 +43,12 @@ Validators marked with an R are supported via regexes. Using multiple regex-back
 ² Same behaviour as DataRequired  
 ³ Due to a bug in YairEO, only fields marked as required are validated, so currently this should have no effect  
 ⁴ With YairEO currently you can only override the default messages
+
+## Setup
+
+Install it with pip, in your preferred virtual environment:
+
+```pip install WTFormsValidation```
 
 ## Running the sample application
 
