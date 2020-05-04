@@ -1,6 +1,6 @@
 """Class for providing Bouncer.js style tags"""
 
-from typing import Dict
+from typing import Dict, List
 
 from wtforms.fields import Field
 from wtforms import validators
@@ -20,6 +20,14 @@ class BouncerTagger(TaggerBase):
         """
         self.email_builtin = email_builtin
         self.url_builtin = url_builtin
+
+    def tags(self, field: Field) -> Dict:
+        result = super().tags(field)
+        messages = [v.message for v in field.validators if (hasattr(v, 'message') and v.message)]
+        if messages:
+            result['data-bouncer-message'] = '\n'.join(messages)
+        return result
+
 
     def URLTags(self, validator: validators.URL):
         if self.url_builtin:

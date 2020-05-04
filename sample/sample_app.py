@@ -6,7 +6,7 @@ from wtforms import StringField, IntegerField
 from wtforms import validators
 
 from WTFormsValidation import yairify, parslify, bouncify
-from WTFormsValidation.tagging.yaireo import YairEOtagger
+from WTFormsValidation.tagging.yaireo import YairEOtagger, yaireo_error_messages
 from WTFormsValidation.tagging.parsley import ParsleyTagger
 from WTFormsValidation.tagging.bouncer import BouncerTagger
 
@@ -29,12 +29,25 @@ class ExampleForm(FlaskForm):
             else:
                 field.render_kw.update({'data-parsley-trigger': 'focusout'})
 
+    def tag_number_fields(self):
+        for field in [self.num_range, self.num_range_2]:
+            if field.render_kw is None:
+                field.render_kw = {'type': 'number'}
+            else:
+                field.render_kw.update({'type': 'number'})
+
     name = StringField('Name (required)', validators=[validators.DataRequired()])
     email = StringField('E-mail address', validators=[validators.Email()])
     date = StringField('Date in yyyy-mm-dd format', validators=[validators.Regexp(r'\d{4}-\d{2}-\d{2}')])
     nameCheck = StringField('Equal to the name field', validators=[validators.EqualTo('name')])
-    ipv4 = StringField('Valid IPv4 address', validators=[validators.IPAddress(ipv4=True, ipv6=False)])
-    ipv6 = StringField('Valid IPv6 address', validators=[validators.IPAddress(ipv4=False, ipv6=True)])
+    ipv4 = StringField('Valid IPv4 address', validators=[
+        validators.DataRequired(message='This is a custom error message.'),
+        validators.IPAddress(ipv4=True, ipv6=False),
+    ])
+    ipv6 = StringField('Valid IPv6 address', validators=[
+        validators.DataRequired(message='This is a custom error message.'),
+        validators.IPAddress(ipv4=False, ipv6=True, message='This is another custom error message.'),
+    ])
     ipv46 = StringField('Valid IPv4 or IPv6 address', validators=[validators.IPAddress(ipv4=True, ipv6=True)])
     length_range = StringField('3-8 chars long string', validators=[validators.Length(3, 8)])
     length_range_2 = StringField('min. 3 chars long string', validators=[validators.Length(min=3)])
@@ -70,7 +83,7 @@ def no_validator():
 def yaireo_builtin():
     form = ExampleForm()
     form.make_all_required()
-    return make_page('yaireo.html', yairify(form))
+    return make_page('yaireo.html', yairify(form), yaireo_errors=yaireo_error_messages(form))
 
 
 @app.route('/yaireo_builtin', methods=['GET', 'POST'])
@@ -78,7 +91,7 @@ def yaireo():
     tagger = YairEOtagger(email_builtin=True, url_builtin=True)
     form = ExampleForm()
     form.make_all_required()
-    return make_page('yaireo.html', tagger.extend(form))
+    return make_page('yaireo.html', tagger.extend(form), yaireo_errors=yaireo_error_messages(form))
 
 
 @app.route('/parsley_builtin', methods=['GET', 'POST'])
@@ -99,6 +112,7 @@ def parsley_regex():
 @app.route('/bouncer', methods=['GET', 'POST'])
 def bouncer_builtin():
     form = ExampleForm()
+    form.tag_number_fields()
     return make_page('bouncer.html', bouncify(form))
 
 
@@ -106,15 +120,16 @@ def bouncer_builtin():
 def bouncer():
     tagger = BouncerTagger(email_builtin=True, url_builtin=True)
     form = ExampleForm()
+    form.tag_number_fields()
     return make_page('bouncer.html', tagger.extend(form))
 
 
-def make_page(template, form: FlaskForm):
+def make_page(template, form: FlaskForm, **kwargs):
     if request.method == 'POST':
         if form.validate():
-            return render_page(template, form, result=colour_text('Form passed backend validation', 'green'))
-        return render_page(template, form, result=colour_text('Form failed backend validation', 'red'), log=form.errors)
-    return render_page(template, form)
+            return render_page(template, form, result=colour_text('Form passed backend validation', 'green'), **kwargs)
+        return render_page(template, form, result=colour_text('Form failed backend validation', 'red'), log=form.errors, **kwargs)
+    return render_page(template, form, **kwargs)
 
 
 if __name__ == '__main__':
