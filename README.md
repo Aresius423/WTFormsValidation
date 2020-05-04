@@ -38,7 +38,7 @@ Validators marked with an R are supported via regexes. Using multiple regex-back
 | Custom validators | ❌      | ❌        | ❌          |               |          |                   |
 | Custom errors     | ❌⁴     | ✔️         | ✔️           |               |          |                   | 
 
-¹ These libraries have built-in support for e-mail and URL validation, but you can choose to use the WTFormsValidation's regex validators instead. Defaults to built-in, unless that requires WTFormsValidation to change the field's type (in the case of YairEO)
+¹ These libraries have built-in support for e-mail and URL validation, but you can choose to use the WTFormsValidation's regex validators instead. Defaults to built-in, unless that requires WTFormsValidation to change the field's type (in the case of YairEO and Bouncer.js)  
 ² Same behaviour as DataRequired  
 ³ Due to a bug in YairEO, only fields marked as required are validated, so currently this should have no effect  
 ⁴ With YairEO currently you can only override the default messages
