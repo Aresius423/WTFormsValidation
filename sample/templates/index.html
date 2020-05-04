@@ -52,18 +52,59 @@
                             <input type="submit" value="Validate">
                         </form>
                     {% endblock %}
+                    <div class="row mt-2">
+                    <div class="col-sm-1"><input type="button" value="Populate" name="button" onclick="form_populate()"></div>
+                    <div class="col-sm-1"><input type="button" value="Clear" name="button" onclick="form_clear()"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <script src="{{ url_for('static', filename='js/jquery-3.5.0.js') }}"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-        {% if log %}
-            <script>
+        <script>
+            {% if log %}
                 console.log({{ log | safe }});
-            </script>
-        {% endif %}
-
+            {% endif %}
+        function form_populate() {
+            document.getElementById('name').value = 'Ema Nymton';
+            document.getElementById('email').value = 'example@google.com';
+            document.getElementById('date').value = '1993-04-23';
+            document.getElementById('nameCheck').value = 'Ema Nymton';
+            document.getElementById('ipv4').value = '127.0.0.1';
+            document.getElementById('ipv6').value = '2a03:2880:f11c:8083:face:b00c:0:25de';
+            document.getElementById('ipv46').value = '2a03:2880:f11c:8083:face:b00c:0:25de';
+            document.getElementById('length_range').value = 'abcd';
+            document.getElementById('length_range_2').value = 'abcd';
+            document.getElementById('mac').value = '11:22:33:44:55:66';
+            document.getElementById('num_range').value = 5;
+            document.getElementById('num_range_2').value = 5;
+            document.getElementById('url').value = 'https://github.com/Aresius423/WTFormsValidation';
+            document.getElementById('uuid').value = '07bd1b9a-1546-4348-981b-504b1914e3de';
+            document.getElementById('anyof').value = '[bob]';
+            document.getElementById('noneof').value = '[bob]by';
+            document.getElementById('optional').value = '';
+        }
+        function form_clear() {
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('date').value = '';
+            document.getElementById('nameCheck').value = '';
+            document.getElementById('ipv4').value = '';
+            document.getElementById('ipv6').value = '';
+            document.getElementById('ipv46').value = '';
+            document.getElementById('length_range').value = '';
+            document.getElementById('length_range_2').value = '';
+            document.getElementById('mac').value = '';
+            document.getElementById('num_range').value = '';
+            document.getElementById('num_range_2').value = '';
+            document.getElementById('url').value = '';
+            document.getElementById('uuid').value = '';
+            document.getElementById('anyof').value = '';
+            document.getElementById('noneof').value = '';
+            document.getElementById('optional').value = '';
+        }
+        </script>
         {% block validatorscript %}{% endblock %}
     </body>
 </html>

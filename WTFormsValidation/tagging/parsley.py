@@ -80,3 +80,6 @@ class ParsleyTagger(TaggerBase):
 
     def NoneOfTags(self, validator: validators.AnyOf):
         return {'data-parsley-pattern': none_of_regex(validator.values)}
+
+    def OptionalTags(self, validator: validators.Optional):
+        return {'optional': ''}

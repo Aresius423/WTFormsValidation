@@ -76,6 +76,6 @@ or by instantiating the tagger class yourself:
 from WTFormsValidation.tagging.parsley import ParsleyTagger
 parsley_tagger = ParsleyTagger(email_builtin=False, url_builtin=False)  # defaults negated
 ...
-render_template('your_template.html', form=parley_tagger.extend(form))
+render_template('your_template.html', form=parsley_tagger.extend(form))
 ```
 
