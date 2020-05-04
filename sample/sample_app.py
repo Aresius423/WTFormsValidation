@@ -6,7 +6,7 @@ from wtforms import StringField, IntegerField
 from wtforms import validators
 
 from WTFormsValidation import yairify, parslify, bouncify
-from WTFormsValidation.tagging.yaireo import YairEOtagger, yaireo_error_messages
+from WTFormsValidation.tagging.yaireo import YairEOtagger
 from WTFormsValidation.tagging.parsley import ParsleyTagger
 from WTFormsValidation.tagging.bouncer import BouncerTagger
 
@@ -83,7 +83,7 @@ def no_validator():
 def yaireo_builtin():
     form = ExampleForm()
     form.make_all_required()
-    return make_page('yaireo.html', yairify(form), yaireo_errors=yaireo_error_messages(form))
+    return make_page('yaireo.html', yairify(form))
 
 
 @app.route('/yaireo_builtin', methods=['GET', 'POST'])
@@ -91,7 +91,7 @@ def yaireo():
     tagger = YairEOtagger(email_builtin=True, url_builtin=True)
     form = ExampleForm()
     form.make_all_required()
-    return make_page('yaireo.html', tagger.extend(form), yaireo_errors=yaireo_error_messages(form))
+    return make_page('yaireo.html', tagger.extend(form))
 
 
 @app.route('/parsley_builtin', methods=['GET', 'POST'])

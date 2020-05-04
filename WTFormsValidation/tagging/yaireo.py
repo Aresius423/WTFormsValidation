@@ -10,15 +10,6 @@ from WTFormsValidation.regex_utils import EMAIL_REGEX, IPV4_REGEX, IPV6_REGEX, \
         IPV46_REGEX, MAC_REGEX, URL_REGEX, UUID_REGEX, any_of_regex, none_of_regex
 
 
-def yaireo_error_messages(form: Form):
-    result = {}
-    for field in form:
-        messages = [v.message for v in field.validators if (hasattr(v, 'message') and v.message)]
-        if messages:
-            result[field.name] = '\n'.join(messages)
-    return result
-
-
 class YairEOtagger(TaggerBase):
     """Class for providing YairEO style tags"""
     def __init__(self, email_builtin=False, url_builtin=False):

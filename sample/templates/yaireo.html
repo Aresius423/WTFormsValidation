@@ -30,14 +30,11 @@
     <script src="{{ url_for('static', filename='js/yaireo.js') }}"></script>
     <script>
         var validator = new FormValidator({"events" : ['blur']}, document.forms[0]);
-        {% if yaireo_errors %}
-            let yaireo_errors = {{ yaireo_errors | safe }};
-            validator.texts = {
-                ...validator.texts,
-                ...{'invalid': 'input is not as expected'},
-                ...yaireo_errors
-            }
-        {% endif %}
+        validator.texts = {
+            ...validator.texts,
+            ...{'invalid': 'input is not as expected'}
+        }
+        // This is how you can override default error messages, but you cannot create new ones at the moment.
 
         document.forms[0].onsubmit = function(e){
             var submit = true,
